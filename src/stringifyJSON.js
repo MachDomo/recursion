@@ -20,17 +20,44 @@ var stringifyJSON = function(obj) {
     1. Convert Boolean, number, and string objects
        if any of these objects, use toString() to convert
    */
-  // Conditionals
-  if (typeof obj === 'undefined' || typeof obj === 'function') {
+ var result = '';
+
+ 
+    // Conditionals
+    if (typeof obj === 'undefined' || typeof obj === 'function') {
+      result = undefined;
+    }
+    if (obj === null) {
+      return 'null';
+    }
+    if (typeof obj === 'boolean' || typeof obj === 'number') {
+      result = obj.toString();  
+    }
+    if (typeof obj === 'string') {
+      result = '"' + obj + '"';
+    }
+
+    // Base Case
     
-    return undefined;
-  }
+    // Recursive Case
 
 
+    
+    
+    if (Array.isArray(obj)) {
 
-  if (typeof obj === 'boolean' || typeof obj === 'number' || typeof obj === 'string') {
-    return obj.toString();
-  }
+      // Base Case
+      if (obj.length === 0) {
+      // return complete array string
+      } else {
+        // Recursion Case
+        // Should somehow make obj.length shorter - shift()
+      }
+      
+    }
+
+    return result;
+  
 
 
 };
