@@ -19,45 +19,115 @@ var stringifyJSON = function(obj) {
   /* Plan: We know this problem uses recursion
     1. Convert Boolean, number, and string objects
        if any of these objects, use toString() to convert
-   */
- var result = '';
+  */
+  var alreadyCalled = false;
 
- 
-    // Conditionals
-    if (typeof obj === 'undefined' || typeof obj === 'function') {
-      result = undefined;
-    }
-    if (obj === null) {
-      return 'null';
-    }
-    if (typeof obj === 'boolean' || typeof obj === 'number') {
-      result = obj.toString();  
-    }
-    if (typeof obj === 'string') {
-      result = '"' + obj + '"';
-    }
+  
+  // Conditionals
+  if (typeof obj === 'undefined' || typeof obj === 'function') {
+  // if you get undefined or a function skip these somehow
+    return '';
+  }
 
-    // Base Case
-    
-    // Recursive Case
+  if (obj === null) {
+    return 'null';
+  }
 
+  if (typeof obj === 'boolean' || typeof obj === 'number') {
+    return obj.toString(); 
+  }
+  if (typeof obj === 'string') {
+    return '"' + obj + '"';
+  }
 
-    
-    
-    if (Array.isArray(obj)) {
-
-      // Base Case
-      if (obj.length === 0) {
-      // return complete array string
-      } else {
-        // Recursion Case
-        // Should somehow make obj.length shorter - shift()
-      }
-      
-    }
-
-    return result;
   
 
 
+  
+
+  if (Array.isArray(obj)) {
+    // Need to be able to account for nested Arrays
+    // What's the best strategy?
+    // Needs to be able to handle nested arrays
+    // example : [[], 'test'] --- > '[[],"test"]'
+    // Idea 1: iterate through each element, convert them to strings. Then convert the whole array to string and add brackets.
+    // Idea 2: shift off an element. Run stringifyJSON on element. Add brackets to final return
+    // Let's go with idea 2 since we need to use recursion
+    var stringifyElement = function (obj) {
+      var element = obj.shift();
+      // Base Case
+      if (element === undefined || element.length === 0 && obj.length === 0) {
+        return '';   
+      } else {
+        element = stringifyJSON(element);
+        if(obj.length !== 0) {
+          var nextElement = ',' + stringifyElement(obj);
+          element = element + nextElement;
+        }
+      }
+      return element;
+    };
+
+   
+    if(obj.length === 0) {
+      return '[]';
+    }
+    return '[' + stringifyElement(obj) + ']';
+
+
+
+
+      
+    }
+  
+}
+
+    
+  
+
+/*
+
+
+var stringifyJSON = function(obj) {
+/*
+var stringifiableObjects = [
+  9,
+  null,
+  true,
+  false,
+  'Hello world',
+  [],
+  [8],
+  ['hi'],
+  [8, 'hi'],
+  [1, 0, -1, -0.3, 0.3, 1343.32, 3345, 0.00011999999999999999],
+  [8, [[], 3, 4]],
+  [[[['foo']]]],
+  {},
+  {'a': 'apple'},
+  {'foo': true, 'bar': false, 'baz': null},
+  {'boolean, true': true, 'boolean, false': false, 'null': null },
+  // basic nesting
+  {'a': {'b': 'c'}},
+  {'a': ['b', 'c']},
+  [{'a': 'b'}, {'c': 'd'}],
+  {'a': [], 'c': {}, 'b': true}
+];
+
+// used for stringifyJSON spec
+// hint: JSON does not allow you to stringify functions or
+// undefined values, so you should skip those key/value pairs.
+unstringifiableValues = [
+  {
+    'functions': function() {},
+    'undefined': undefined
+  }
+];
+
+
+
+
+
 };
+
+*/
