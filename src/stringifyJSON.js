@@ -24,10 +24,15 @@ var stringifyJSON = function(obj) {
   var stringifyObject = function(keyValues) {
         var valuePair = keyValues.shift();
         if (typeof valuePair[1] === 'function' || typeof valuePair[1] === 'undefined') {
-          return '';
-        }
+          if(keyValues.length === 0) {
+            return '';
+          } else {
+            return stringifyObject(keyValues);
+          }
+        } 
         var stringObject = stringifyJSON(valuePair[0]) + ':' + stringifyJSON(valuePair[1]);
         if (keyValues.length !== 0) {
+
           stringObject += ',' + stringifyObject(keyValues);
         }
         return stringObject;
