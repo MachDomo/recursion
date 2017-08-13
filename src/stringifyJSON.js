@@ -78,11 +78,12 @@ var stringifyJSON = function(obj) {
       var keyValues = Object.entries(obj);
       var stringifyObject = function(keyValues) {
         var valuePair = keyValues.shift();
-        var key = stringifyJSON(valuePair[0]);
-        var value = stringifyJSON(valuePair[1]);
-        if(typeof value === 'function' || typeof value === 'undefined') {
+        if (typeof valuePair[1] === 'function' || typeof valuePair[1] === 'undefined') {
           return '';
         }
+        var key = stringifyJSON(valuePair[0]);
+        var value = stringifyJSON(valuePair[1]);
+        
         var stringObject = key + ':' + value;
         if (keyValues.length !== 0) {
           stringObject += ',' + stringifyObject(keyValues);
