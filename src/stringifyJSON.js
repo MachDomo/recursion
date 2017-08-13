@@ -20,8 +20,6 @@ var stringifyJSON = function(obj) {
     1. Convert Boolean, number, and string objects
        if any of these objects, use toString() to convert
   */
-  var alreadyCalled = false;
-
   
   // Conditionals
   if (typeof obj === 'undefined' || typeof obj === 'function') {
@@ -44,7 +42,7 @@ var stringifyJSON = function(obj) {
 
 
   
-
+  // For Arrays
   if (Array.isArray(obj)) {
     // Need to be able to account for nested Arrays
     // What's the best strategy?
@@ -53,7 +51,7 @@ var stringifyJSON = function(obj) {
     // Idea 1: iterate through each element, convert them to strings. Then convert the whole array to string and add brackets.
     // Idea 2: shift off an element. Run stringifyJSON on element. Add brackets to final return
     // Let's go with idea 2 since we need to use recursion
-    var stringifyElement = function (obj) {
+    var stringifyArray = function (obj) {
       var element = obj.shift();
       // Base Case
       if (element === undefined || element.length === 0 && obj.length === 0) {
@@ -61,23 +59,44 @@ var stringifyJSON = function(obj) {
       } else {
         element = stringifyJSON(element);
         if(obj.length !== 0) {
-          var nextElement = ',' + stringifyElement(obj);
+          var nextElement = ',' + stringifyArray(obj);
           element = element + nextElement;
         }
       }
       return element;
     };
 
-   
     if(obj.length === 0) {
       return '[]';
     }
-    return '[' + stringifyElement(obj) + ']';
 
+    return '[' + stringifyArray(obj) + ']';
+    }
 
-
+    // For Objects
+    if (typeof obj === 'object') {
+      var keyValues = Object.entries(obj);
+      var stringifyObject = function(keyValues) {
+        var valuePair = keyValues.shift();
+        var key = stringifyJSON(valuePair[0]);
+        var value = stringifyJSON(valuePair[1]);
+        if(typeof value === 'function' || typeof value === 'undefined') {
+          return '';
+        }
+        var stringObject = key + ':' + value;
+        if (keyValues.length !== 0) {
+          stringObject += ',' + stringifyObject(keyValues);
+        }
+        return stringObject;
+      };
 
       
+      
+      if (keyValues.length === 0) {
+        return '{}';
+      }
+
+      return '{' + stringifyObject(keyValues) + '}';
     }
   
 }
