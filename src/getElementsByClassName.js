@@ -37,6 +37,5 @@ var getElementsByClassName = function(className
 
   }
   nodeListRecursion(nodeList);
-  console.log(result);
   return result;
 };
