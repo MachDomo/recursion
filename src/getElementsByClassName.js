@@ -9,29 +9,34 @@ var getElementsByClassName = function(className
   // your code here
   /*
   The getElementsByClassName() method returns a collection of all elements in the document with the
-   specified class name, as a NodeList object.
+  specified class name, as a NodeList object.
 
- The NodeList object represents a collection of nodes.
- The nodes can be accessed by index numbers. The index starts at 0.
+  The NodeList object represents a collection of nodes.
+  The nodes can be accessed by index numbers. The index starts at 0.
 
-Tip: You can use the length property of the NodeList object to determine the number
- of elements with a specified class name, then you can loop through all elements and extract the info you want.
+  Tip: You can use the length property of the NodeList object to determine the number
+   of elements with a specified class name, then you can loop through all elements and extract the info you want.
 
-Maybe search element.classList /element.className using element.childNodes
-document.body.childNodes[x].classList
-*/
-var nodeList = document.body.childNodes;
-var result = [];
+  Maybe search element.classList /element.className using element.childNodes
+  document.body.childNodes[x].classList
+  */
+  var nodeList = document.children;
+  var result = [];
 
-var recursive = function(nodeList) {
-	if (nodeList.childNodes.length !== )
+  var nodeListRecursion = function(nodeList) {
+  	for (var i = 0; i < nodeList.length; i++) {
+      
+      if (nodeList[i].classList.contains(className)) {
+        result.push(nodeList[i]);
+      }
 
-}
+      if (nodeList[i].children.length !== 0) {
+        nodeListRecursion(nodeList[i].children);
+      }
+    }
 
-if(nodeList.length)
-
-
-
-
-
+  }
+  nodeListRecursion(nodeList);
+  console.log(result);
+  return result;
 };
